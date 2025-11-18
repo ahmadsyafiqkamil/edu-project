@@ -86,3 +86,6 @@ Berikut adalah fungsi-fungsi inti yang akan ada di dalam smart contract untuk me
   - **Logika:** Menerima `_amount` stablecoin dari mahasiswa dan menambahkannya kembali ke total aset di dalam pool.
   - **Emit Event:** `LoanRepaid(uint256 loanId, address student, uint256 amount)`
 
+
+
+
