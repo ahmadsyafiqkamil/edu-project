@@ -1,95 +1,95 @@
-# Dokumen Kebutuhan Produk (PRD): Platform Pinjaman Mahasiswa Blockchain (MVP)
+# Dokumen Kebutuhan Produk (PRD): Platform Pembiayaan Pendidikan Syariah (MVP)
 
 ## 1. Pendahuluan/Gambaran Umum
 
-Dokumen ini menguraikan persyaratan untuk Produk Minimum yang Layak (MVP) dari Platform Pinjaman Mahasiswa yang terdesentralisasi. Platform ini bertujuan untuk menyelesaikan tantangan aksesibilitas pinjaman mahasiswa dengan menghubungkan secara langsung mahasiswa yang mencari dana pendidikan dengan investor yang mencari peluang dengan dampak sosial. Dengan memanfaatkan teknologi blockchain, kami bertujuan untuk menciptakan ekosistem yang transparan, efisien, dan aman untuk originasi, pendanaan, dan pembayaran kembali pinjaman.
+Dokumen ini menguraikan persyaratan untuk Produk Minimum yang Layak (MVP) dari Platform Pembiayaan Pendidikan Syariah. Platform ini bertujuan untuk menyediakan akses pembiayaan yang sesuai dengan prinsip syariah bagi mahasiswa dengan menghubungkan mereka secara langsung dengan penyedia dana (investor) melalui model *liquidity pool*.
 
-Tujuan utama dari MVP 3 minggu ini adalah untuk membangun dan memvalidasi perjalanan pengguna yang lengkap dari awal hingga akhir: dari seorang mahasiswa mengajukan pinjaman, investor mendanainya, mahasiswa menerima dana, hingga proses pembayaran kembali dimulai.
+Dengan memanfaatkan teknologi blockchain, kami bertujuan untuk menciptakan ekosistem yang transparan, efisien, dan aman untuk pembiayaan pendidikan berdasarkan **akad *Murabahah*** (jual beli dengan margin keuntungan), di mana platform membeli jasa pendidikan untuk mahasiswa dan menjualnya kembali dengan harga angsuran yang disepakati di awal, **tanpa unsur bunga (*riba*)**.
+
+Tujuan utama MVP ini adalah memvalidasi alur lengkap: dari investor menyetor dana, mahasiswa mengajukan pembiayaan, dana dicairkan ke institusi pendidikan, hingga mahasiswa membayar angsuran kembali ke pool.
 
 ## 2. Tujuan
 
-*   **G-1:** Membuat platform fungsional di mana mahasiswa dapat mendaftar dan mengajukan aplikasi pinjaman.
-*   **G-2:** Memungkinkan investor untuk mendaftar, menyetor modal, dan melihat aplikasi pinjaman yang tersedia untuk didanai.
-*   **G--3:** Berhasil memfasilitasi pencairan dana dari pool investor ke dompet mahasiswa setelah acara pendanaan berhasil.
-*   **G-4:** Menerapkan mekanisme bagi mahasiswa untuk melakukan pembayaran kembali yang dilacak di blockchain.
-*   **G-5:** Memvalidasi arsitektur teknis inti menggunakan smart contract untuk semua operasi keuangan penting.
+*   **G-1:** Membuat platform fungsional di mana mahasiswa dapat mengajukan pembiayaan pendidikan untuk tujuan yang spesifik.
+*   **G-2:** Memungkinkan investor (penyedia dana) untuk menyetor modal ke dalam *liquidity pool* syariah dan mendapatkan imbal hasil dari margin keuntungan.
+*   **G-3:** Berhasil memfasilitasi pencairan dana pembiayaan **langsung ke institusi pendidikan** yang dituju.
+*   **G-4:** Menerapkan mekanisme bagi mahasiswa untuk membayar angsuran yang dilacak secara transparan di blockchain.
+*   **G-5:** Memvalidasi arsitektur teknis inti menggunakan smart contract untuk semua transaksi keuangan sesuai prinsip syariah.
 
 ## 3. User Stories
 
-### Sebagai Mahasiswa...
-*   **US-1:** Saya ingin membuat akun dan membangun profil sederhana agar saya dapat mengajukan pinjaman.
-*   **US-2:** Saya ingin mengisi formulir aplikasi pinjaman yang jelas dan lugas, dengan menyebutkan jumlah yang saya butuhkan dan tujuan pinjaman.
-*   **US-3:** Saya ingin dapat melihat status aplikasi pinjaman saya (misalnya, tertunda, didanai, aktif, dilunasi) di dasbor pribadi.
-*   **US-4:** Saya ingin menerima jumlah pinjaman secara aman langsung ke dompet mata uang kripto saya yang terhubung setelah aplikasi saya didanai.
-*   **US-5:** Saya ingin melihat jadwal pembayaran saya dan dapat melakukan pembayaran kembali bulanan/berkala melalui platform.
+### Sebagai Mahasiswa (Peserta Pembiayaan)...
+*   **US-1:** Saya ingin membuat akun agar dapat mengajukan pembiayaan untuk biaya pendidikan saya.
+*   **US-2:** Saya ingin mengisi formulir pengajuan pembiayaan yang jelas, menyebutkan jasa pendidikan yang dibutuhkan (misal: SPP), harganya, dan detail institusi pendidikan.
+*   **US-3:** Saya ingin melihat status pengajuan saya (misal: menunggu persetujuan, disetujui, lunas) di dasbor pribadi.
+*   **US-4:** Saya ingin platform membayarkan biaya pendidikan saya langsung ke universitas setelah pembiayaan disetujui.
+*   **US-5:** Saya ingin melihat jadwal angsuran saya yang **tetap dan tidak berubah**, dan dapat membayar angsuran bulanan melalui platform.
 
-### Sebagai Investor...
-*   **US-6:** Saya ingin membuat akun untuk berpartisipasi sebagai pemberi pinjaman di platform.
-*   **US-7:** Saya ingin dapat menyetor modal (misalnya, stablecoin seperti USDC) ke dalam brankas platform atau smart contract yang aman.
-*   **US-8:** Saya ingin menelusuri daftar aplikasi pinjaman mahasiswa, dengan detail dasar tentang permintaan mahasiswa, sehingga saya dapat memilih mana yang akan didanai.
-*   **US-9:** Saya ingin mengikat sejumlah modal yang saya setorkan ke satu atau lebih pinjaman mahasiswa.
-*   **US-10:** Saya ingin dasbor sederhana untuk melacak investasi saya, melihat pinjaman mana yang telah saya danai, dan melihat status pembayaran kembali.
+### Sebagai Investor (Penyedia Dana)...
+*   **US-6:** Saya ingin membuat akun untuk berpartisipasi sebagai penyedia dana di dalam *liquidity pool* yang sesuai syariah.
+*   **US-7:** Saya ingin dapat menyetor modal (stablecoin) ke dalam *liquidity pool* dan menerima token LP (`eduLP`) sebagai bukti kepemilikan.
+*   **US-8:** Saya ingin keuntungan saya berasal dari bagi hasil atas margin keuntungan transaksi jual-beli, bukan dari bunga.
+*   **US-9:** Saya ingin dasbor sederhana untuk melacak total modal saya, nilai token LP saya, dan estimasi imbal hasil yang didapatkan.
 
 ## 4. Persyaratan Fungsional
 
-### FR-1: Manajemen Pengguna (Bersama)
-*   **FR-1.1:** Sistem harus memungkinkan pengguna untuk menghubungkan dompet mata uang kripto mereka (misalnya, MetaMask) untuk mendaftar.
-*   **FR-1.2:** Pengguna harus memilih peran saat pendaftaran: "Mahasiswa" atau "Investor".
-*   **FR-1.3:** Sistem harus menyediakan fungsionalitas login/logout dasar yang terikat dengan alamat dompet pengguna.
+### FR-1: Manajemen Pengguna
+*   **FR-1.1:** Sistem harus memungkinkan pengguna mendaftar menggunakan dompet kripto mereka.
+*   **FR-1.2:** Pengguna harus memilih peran: "Mahasiswa" atau "Investor".
 
-### FR-2: Fungsionalitas Khusus Mahasiswa
-*   **FR-2.1:** Sistem harus menyediakan formulir bagi mahasiswa untuk mengajukan aplikasi pinjaman. Formulir akan mencakup:
-    *   Jumlah Pinjaman yang Diminta (dalam stablecoin yang ditentukan, misalnya, USDC).
-    *   Tujuan Pinjaman (misalnya, biaya kuliah, biaya hidup).
-    *   Informasi Universitas/Program Studi.
-    *   Periode Pembayaran Kembali yang Diminta.
-*   **FR-2.2:** Mahasiswa harus memiliki dasbor pribadi untuk melihat status aplikasi pinjaman aktif mereka.
+### FR-2: Alur Pembiayaan Mahasiswa (Akad Murabahah)
+*   **FR-2.1:** Sistem harus menyediakan formulir pengajuan pembiayaan yang mengharuskan mahasiswa mengisi:
+    *   **Harga Pokok Jasa:** Jumlah biaya pendidikan yang harus dibayar.
+    *   **Tujuan Pembiayaan:** Detail (misal: SPP Semester Ganjil 2025/2026).
+    *   **Alamat Dompet Penerima:** Alamat dompet kripto milik institusi pendidikan (wajib).
+*   **FR-2.2:** Sistem (melalui admin) akan menentukan **Harga Jual** (Harga Pokok + Margin Keuntungan) dan menawarkannya kepada mahasiswa.
+*   **FR-2.3:** Setelah mahasiswa menyetujui, sistem akan mencairkan dana sebesar **Harga Pokok** langsung ke alamat dompet institusi.
+*   **FR-2.4:** Sistem harus menyediakan antarmuka bagi mahasiswa untuk membayar angsuran bulanan dari total **Harga Jual**.
 
-### FR-3: Fungsionalitas Khusus Investor
-*   **FR-3.1:** Sistem harus menyediakan antarmuka bagi investor untuk menyetor stablecoin (misalnya, USDC) ke dalam smart contract platform.
-*   **FR-3.2:** Sistem harus menampilkan daftar semua aplikasi pinjaman mahasiswa yang tertunda untuk ditinjau oleh investor.
-*   **FR-3.3:** Investor harus dapat mengalokasikan dana dari saldo yang mereka setorkan ke aplikasi pinjaman tertentu.
-*   **FR-3.4:** Investor harus memiliki dasbor pribadi yang menunjukkan:
-    *   Total modal yang disetor.
-    *   Modal yang dialokasikan untuk pinjaman.
-    *   Daftar pinjaman yang telah mereka danai.
+### FR-3: Alur Liquidity Pool Investor
+*   **FR-3.1:** Sistem harus menyediakan antarmuka bagi investor untuk menyetor stablecoin ke *liquidity pool*.
+*   **FR-3.2:** Atas setiap setoran, sistem (smart contract) harus mencetak (`mint`) token `eduLP` secara proporsional kepada investor.
+*   **FR-3.3:** Sistem harus menyediakan antarmuka bagi investor untuk menarik dana dengan menukarkan (`burn`) token `eduLP` mereka dengan stablecoin yang setara nilainya saat itu.
 
-### FR-4: Logika Inti Pinjaman & Pembayaran Kembali (Smart Contract)
-*   **FR-4.1:** Sistem harus secara otomatis mencairkan jumlah pinjaman penuh ke dompet mahasiswa setelah aplikasi mereka 100% didanai.
-*   **FR-4.2:** Sistem harus menyediakan fungsi bagi mahasiswa untuk melakukan pembayaran kembali. Fungsi ini akan mentransfer dana dari dompet mahasiswa kembali ke kontrak platform.
+### FR-4: Logika Ekonomi & Bagi Hasil (Smart Contract)
+*   **FR-4.1:** Smart contract harus mampu memisahkan pembayaran angsuran dari mahasiswa menjadi porsi pengembalian pokok dan porsi margin keuntungan.
+*   **FR-4.2:** Margin keuntungan yang terkumpul harus dibagi sesuai rasio yang ditentukan (misal: 80% untuk pool investor, 20% untuk kas platform).
+*   **FR-4.3:** Bagian keuntungan untuk investor harus dimasukkan kembali ke *liquidity pool* untuk meningkatkan nilai token `eduLP`.
+*   **FR-4.4:** Bagian keuntungan untuk platform harus ditransfer ke alamat dompet terpisah (`platformTreasury`).
 
 ## 5. Non-Goals (Di Luar Cakupan untuk MVP)
 
-*   **Tidak ada penilaian kredit yang kompleks:** MVP tidak akan menyertakan model penilaian kredit atau penilaian risiko otomatis untuk mahasiswa. Keputusan pendanaan ada di tangan investor.
-*   **Tidak ada pasar sekunder:** Investor tidak dapat memperdagangkan atau menjual posisi pinjaman mereka kepada investor lain.
-*   **Hanya satu mata uang:** Platform akan beroperasi dengan satu stablecoin (misalnya, USDC). Tidak ada dukungan untuk beberapa mata uang fiat atau kripto.
-*   **Tidak ada analitik lanjutan:** Dasbor akan sederhana dan tidak akan menyediakan perhitungan ROI yang kompleks, analisis portofolio, atau tren pasar.
-*   **Hanya web:** Tidak ada aplikasi seluler asli (iOS/Android) yang akan dikembangkan untuk MVP.
+*   **Akad Selain Murabahah:** MVP ini tidak akan mendukung akad syariah lain seperti *Ijarah* (sewa), *Musyarakah*, atau *Qardhul Hasan*.
+*   **Verifikasi Otomatis Institusi:** Proses verifikasi alamat dompet institusi pendidikan akan dilakukan secara manual oleh tim untuk MVP.
+*   **Pasar Sekunder untuk Token LP:** Investor tidak dapat memperdagangkan token `eduLP` mereka.
 
-## 6. Pertimbangan Desain (Opsional)
+## 6. Pertimbangan Desain & Terminologi
 
-*   Antarmuka pengguna harus bersih, sederhana, dan intuitif.
-*   Fokus utama adalah pada fungsionalitas dan kegunaan, bukan pada desain yang rumit.
-*   Ini harus dengan jelas membedakan alur pengguna untuk Mahasiswa vs. Investor.
+*   **Wajib:** Semua terminologi di UI/UX harus diubah untuk mencerminkan prinsip syariah.
+    *   `Loan` -> `Pembiayaan` / `Financing`
+    *   `Interest` -> `Margin Keuntungan` / `Profit Margin`
+    *   `Borrower` -> `Mahasiswa` / `Peserta Pembiayaan`
+    *   `Lender` -> `Investor` / `Penyedia Dana`
+*   Alur pengajuan harus jelas menunjukkan bahwa dana akan dikirim ke institusi, bukan ke mahasiswa.
 
-## 7. Pertimbangan Teknis (Opsional)
+## 7. Pertimbangan Teknis
 
-*   Logika inti (pool pendanaan, kontrak pinjaman, pencairan, pembayaran kembali) harus dibangun menggunakan smart contract Solidity di blockchain yang kompatibel dengan EVM.
-*   Frontend akan menjadi aplikasi web yang berinteraksi dengan smart contract (misalnya, menggunakan ethers.js atau web3.js).
-*   Otentikasi pengguna akan ditangani melalui koneksi dompet (misalnya, MetaMask).
+*   Smart contract `LoanPlatform.sol` harus memiliki logika untuk membedakan antara harga pokok dan harga jual dalam setiap pembiayaan.
+*   Logika pencairan dana harus secara ketat mengirim dana hanya ke alamat `beneficiary` (institusi).
 
 ## 8. Metrik Keberhasilan
 
-*   Metrik keberhasilan utama untuk MVP adalah penyelesaian yang berhasil dan bebas dari kesalahan dari setidaknya **satu** siklus pinjaman dari awal hingga akhir:
-    1.  Seorang mahasiswa berhasil mengajukan pinjaman.
-    2.  Seorang investor berhasil menyetor dana.
-    3.  Investor mengalokasikan dana untuk pinjaman mahasiswa.
-    4.  Pinjaman didanai sepenuhnya.
-    5.  Dana berhasil dicairkan ke dompet mahasiswa.
+*   Berhasilnya minimal satu siklus pembiayaan syariah end-to-end:
+    1.  Investor menyetor dana ke pool.
+    2.  Mahasiswa mengajukan pembiayaan dan disetujui.
+    3.  Dana sebesar **harga pokok** berhasil dicairkan ke dompet institusi.
+    4.  Mahasiswa berhasil membayar minimal satu kali angsuran.
+    5.  Margin keuntungan dari angsuran tersebut berhasil didistribusikan (ke pool dan ke kas platform).
+    6.  Investor dapat menarik dananya dengan nilai `eduLP` yang sudah sedikit meningkat.
 
 ## 9. Pertanyaan Terbuka
 
-*   Jaringan blockchain spesifik mana yang akan kita gunakan untuk men-deploy MVP (misalnya, testnet Ethereum seperti Sepolia, atau solusi Layer-2 seperti Polygon/Arbitrum untuk biaya gas yang lebih rendah)?
-*   Stablecoin mana yang akan digunakan untuk semua transaksi (misalnya, USDC, DAI)?
+*   Berapa rasio bagi hasil (Profit Sharing Ratio) awal yang akan ditetapkan antara investor dan platform? (Saran: 80/20)
+*   Berapa margin keuntungan standar yang akan ditawarkan kepada mahasiswa? (perlu riset pasar)
 
 

@@ -1,0 +1,58 @@
+{
+  "network": {
+    "name": "Lisk Sepolia",
+    "chainId": 4202,
+    "rpcUrl": "https://rpc.sepolia-api.lisk.com/5bec97bedf0944d481a25ea6a55e985c",
+    "blockExplorer": "https://sepolia-blockscout.lisk.com"
+  },
+  "deploymentDate": "2025-11-21",
+  "contracts": {
+    "MockERC20": {
+      "address": "0xfE0723E7904deF87F43da03C8eeB675eA8BeCC62",
+      "txHash": "0x13ab3ee30e605b3e4e3bb81aad966ef3e59f10107d7146eeaec810172c4baf78",
+      "block": 29185963,
+      "verified": true,
+      "explorerUrl": "https://sepolia-blockscout.lisk.com/address/0xfe0723e7904def87f43da03c8eeb675ea8becc62",
+      "metadata": {
+        "name": "Mock USDC",
+        "symbol": "mUSDC",
+        "decimals": 6,
+        "initialSupply": "1000000000000000"
+      }
+    },
+    "LoanPlatform": {
+      "address": "0x20CAd8deBFb7D39237e684FdfEB9CeF61f8F10eA",
+      "txHash": "0x211e679e7443b696b675ee2d7e9ec7c46ca1d3e2af72166d4b5addbd02441c1e",
+      "block": 29186065,
+      "verified": true,
+      "explorerUrl": "https://sepolia-blockscout.lisk.com/address/0x20cad8debfb7d39237e684fdfeb9cef61f8f10ea",
+      "metadata": {
+        "owner": "0x366d3F2095b815e9fe65723ed8d53527B141B1E6",
+        "platformTreasury": "0x5160352f875D9E77Fdf215c357Fc0FD5E1A3fC3f",
+        "underlyingToken": "0xfE0723E7904deF87F43da03C8eeB675eA8BeCC62",
+        "maxUtilizationRate": 8000,
+        "platformShareRatio": 2000
+      }
+    },
+    "EduLPToken": {
+      "address": "0x190DB7d150E0ea60eeeDf70014CAAB6b237a0533",
+      "txHash": "0x211e679e7443b696b675ee2d7e9ec7c46ca1d3e2af72166d4b5addbd02441c1e",
+      "block": 29186065,
+      "verified": true,
+      "explorerUrl": "https://sepolia-blockscout.lisk.com/address/0x190db7d150e0ea60eeedf70014caab6b237a0533",
+      "metadata": {
+        "name": "Education LP Token",
+        "symbol": "eduLP",
+        "decimals": 18,
+        "owner": "0x20CAd8deBFb7D39237e684FdfEB9CeF61f8F10eA",
+        "loanPlatform": "0x20CAd8deBFb7D39237e684FdfEB9CeF61f8F10eA"
+      }
+    }
+  },
+  "abi": {
+    "MockERC20": "out/MockERC20.sol/MockERC20.json",
+    "LoanPlatform": "out/LoanPlatform.sol/LoanPlatform.json",
+    "EduLPToken": "out/EduLPToken.sol/EduLPToken.json"
+  }
+}
+
