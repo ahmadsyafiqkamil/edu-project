@@ -3,7 +3,8 @@
 ## Daftar Isi
 1. [EduLPToken.sol](#edulptokensol)
 2. [LoanPlatform.sol](#loanplatformsol)
-3. [MockERC20.sol](#mockerc20sol)
+3. [MurabahahCalculator.sol](#murabahahcalculatorsol)
+4. [MockERC20.sol](#mockerc20sol)
 
 ---
 
@@ -380,6 +381,136 @@ struct Financing {
   - Format: 8000 = 80.00%
 - **Visibility**: External
 
+#### `quoteFinancing(uint256 _purchasePrice, uint256 _marginRateBps, uint256 _tenureMonths) external pure returns (uint256 sellingPrice, uint256 totalMargin, uint256 monthlyInstallment)`
+- **Tipe**: Pure
+- **Parameter**:
+  - `_purchasePrice`: Harga pokok jasa/barang (dalam satuan terkecil token)
+  - `_marginRateBps`: Margin keuntungan tahunan dalam basis points (contoh: 500 = 5%)
+  - `_tenureMonths`: Jangka waktu pembiayaan dalam bulan
+- **Return**: 
+  - `sellingPrice`: Total harga jual (kewajiban mahasiswa)
+  - `totalMargin`: Total keuntungan margin
+  - `monthlyInstallment`: Angsuran per bulan
+- **Deskripsi**: 
+  - Fungsi kalkulator untuk menghitung estimasi pembiayaan Murabahah
+  - Menggunakan library `MurabahahCalculator` untuk perhitungan
+  - Fungsi `pure` (tidak mengakses state), dapat dipanggil tanpa gas fee
+  - Berguna untuk frontend/off-chain estimation sebelum pengajuan pembiayaan
+  - Formula:
+    - `totalMargin = (_purchasePrice * _marginRateBps * _tenureMonths) / (12 * 10000)`
+    - `sellingPrice = _purchasePrice + totalMargin`
+    - `monthlyInstallment = sellingPrice / _tenureMonths`
+- **Contoh Penggunaan**:
+  ```solidity
+  // Hitung untuk SPP 10 juta (666.666.666 dengan 6 decimals), margin 5%, tenor 12 bulan
+  (uint256 sellingPrice, uint256 margin, uint256 installment) = 
+      loanPlatform.quoteFinancing(666_666_666, 500, 12);
+  // sellingPrice = 699.999.999 (sekitar 10.5 juta)
+  // margin = 33.333.333 (sekitar 500 ribu)
+  // installment = 58.333.333 (sekitar 875 ribu per bulan)
+  ```
+- **Visibility**: External
+- **Access Control**: Public (siapa saja bisa memanggil untuk estimasi)
+
+---
+
+## MurabahahCalculator.sol
+
+### Deskripsi
+Library Solidity untuk menghitung detail pembiayaan Murabahah (jual-beli syariah). Library ini menyediakan fungsi-fungsi helper untuk menghitung margin keuntungan, harga jual, dan angsuran bulanan berdasarkan prinsip Murabahah yang sesuai syariah.
+
+### Tipe
+- **Library**: Tidak dapat di-deploy sendiri, digunakan oleh kontrak lain
+
+### Functions
+
+#### `calculateFinancingDetail(uint256 _purchasePrice, uint256 _marginRateBps, uint256 _tenureMonths) internal pure returns (uint256 sellingPrice, uint256 totalMargin, uint256 monthlyInstallment)`
+- **Tipe**: Internal, Pure
+- **Parameter**:
+  - `_purchasePrice`: Harga pokok pembelian (dalam satuan terkecil token)
+  - `_marginRateBps`: Margin keuntungan tahunan dalam basis points (1% = 100 Bps, 5% = 500 Bps)
+  - `_tenureMonths`: Jangka waktu pembiayaan dalam bulan
+- **Return**: 
+  - `sellingPrice`: Total harga jual kepada mahasiswa
+  - `totalMargin`: Total margin keuntungan
+  - `monthlyInstallment`: Angsuran bulanan (fixed)
+- **Deskripsi**: 
+  - Menghitung detail lengkap pembiayaan Murabahah
+  - Formula Margin: `(PurchasePrice × MarginRate × TenureMonths) / (12 × 10000)`
+  - Formula Selling Price: `PurchasePrice + TotalMargin`
+  - Formula Installment: `SellingPrice / TenureMonths`
+  - Margin dihitung berdasarkan annual rate yang diproporsikan ke tenor
+- **Revert Conditions**:
+  - Jika `_tenureMonths` = 0: "Tenure must be > 0"
+- **Contoh Perhitungan**:
+  ```
+  Purchase Price: 10.000.000
+  Margin Rate: 5% per tahun (500 Bps)
+  Tenor: 12 bulan
+  
+  Total Margin = (10.000.000 × 500 × 12) / (12 × 10.000) = 500.000
+  Selling Price = 10.000.000 + 500.000 = 10.500.000
+  Monthly Installment = 10.500.000 / 12 = 875.000
+  ```
+- **Visibility**: Internal (hanya dapat dipanggil dari kontrak yang mengimport library)
+
+#### `calculateEffectiveRate(uint256 _purchasePrice, uint256 _sellingPrice, uint256 _tenureMonths) internal pure returns (uint256 effectiveRateBps)`
+- **Tipe**: Internal, Pure
+- **Parameter**:
+  - `_purchasePrice`: Harga pokok pembelian
+  - `_sellingPrice`: Harga jual yang sudah ditentukan
+  - `_tenureMonths`: Jangka waktu pembiayaan dalam bulan
+- **Return**: `uint256` - Effective margin rate tahunan dalam basis points
+- **Deskripsi**: 
+  - Menghitung effective margin rate dari harga jual yang sudah ditentukan
+  - Berguna jika admin menentukan selling price secara manual
+  - Formula invers: `Rate = (Margin × 12 × 10000) / (PurchasePrice × TenureMonths)`
+  - Dimana: `Margin = SellingPrice - PurchasePrice`
+- **Revert Conditions**:
+  - Jika `_sellingPrice` < `_purchasePrice`: "Selling price < Purchase price"
+  - Jika `_tenureMonths` = 0: "Tenure must be > 0"
+  - Jika `_purchasePrice` = 0: "Purchase price must be > 0"
+- **Contoh Perhitungan**:
+  ```
+  Purchase Price: 10.000.000
+  Selling Price: 10.500.000
+  Tenor: 12 bulan
+  
+  Margin = 10.500.000 - 10.000.000 = 500.000
+  Effective Rate = (500.000 × 12 × 10.000) / (10.000.000 × 12) = 500 Bps (5%)
+  ```
+- **Visibility**: Internal
+
+### Penggunaan di LoanPlatform
+
+Library ini digunakan oleh `LoanPlatform` melalui fungsi `quoteFinancing()`:
+
+```solidity
+function quoteFinancing(...) external pure returns (...) {
+    return MurabahahCalculator.calculateFinancingDetail(...);
+}
+```
+
+### Catatan Penting
+
+1. **Basis Points**: Margin rate menggunakan basis points (Bps) di mana:
+   - 1% = 100 Bps
+   - 5% = 500 Bps
+   - 10% = 1000 Bps
+
+2. **Annual Rate**: Margin rate adalah **tahunan**, sehingga untuk tenor yang lebih pendek, margin akan diproporsikan:
+   - Tenor 6 bulan dengan rate 5% = 2.5% margin
+   - Tenor 12 bulan dengan rate 5% = 5% margin
+
+3. **Fixed Installment**: Angsuran bulanan bersifat **tetap** (fixed) selama masa pembiayaan, sesuai prinsip Murabahah.
+
+4. **Integer Division**: Perhitungan menggunakan integer division, sehingga mungkin ada sedikit rounding error pada angsuran terakhir.
+
+5. **Syariah Compliance**: Perhitungan ini sesuai dengan prinsip Murabahah karena:
+   - Margin ditentukan di awal (fixed)
+   - Tidak ada bunga berbunga (compound interest)
+   - Transparan dan jelas sejak awal
+
 ---
 
 ## MockERC20.sol
@@ -442,6 +573,7 @@ Platform ini menggunakan akad **Murabahah** (jual-beli), bukan riba (bunga):
 - Platform menjual kepada mahasiswa dengan margin keuntungan (selling price)
 - Mahasiswa membayar secara angsuran (pokok + margin)
 - Margin dibagi antara investor pool (80%) dan platform (20%)
+- **Kalkulator Murabahah**: Gunakan fungsi `quoteFinancing()` untuk menghitung estimasi pembiayaan sebelum pengajuan (lihat dokumentasi `MurabahahCalculator.sol` di atas)
 
 ### Keamanan
 - Semua fungsi penting memiliki validasi input
@@ -597,6 +729,63 @@ console.log(`USDC Balance: ${ethers.formatUnits(usdcBalance, 6)}`);
 ---
 
 ### 3. Alur Mahasiswa (Peserta Pembiayaan)
+
+#### 3.0 Menggunakan Kalkulator Murabahah (Estimasi)
+
+**Sebelum mengajukan pembiayaan, mahasiswa dapat menghitung estimasi angsuran:**
+
+```javascript
+// Contoh: Hitung estimasi untuk SPP 10 juta, margin 5%, tenor 12 bulan
+// Asumsi: 1 USDC = Rp 15.000, jadi 10 juta = 666.666.666 (dengan 6 decimals)
+
+const purchasePrice = ethers.parseUnits("666.666666", 6); // 10 juta dalam USDC
+const marginRateBps = 500; // 5% per tahun = 500 basis points
+const tenureMonths = 12; // 12 bulan
+
+// Panggil fungsi quoteFinancing (gratis, tidak perlu gas)
+const [sellingPrice, totalMargin, monthlyInstallment] = await loanPlatform.quoteFinancing(
+    purchasePrice,
+    marginRateBps,
+    tenureMonths
+);
+
+// Konversi ke format yang mudah dibaca
+console.log(`Harga Pokok: ${ethers.formatUnits(purchasePrice, 6)} USDC`);
+console.log(`Total Margin: ${ethers.formatUnits(totalMargin, 6)} USDC`);
+console.log(`Harga Jual (Total Kewajiban): ${ethers.formatUnits(sellingPrice, 6)} USDC`);
+console.log(`Angsuran Bulanan: ${ethers.formatUnits(monthlyInstallment, 6)} USDC`);
+
+// Output:
+// Harga Pokok: 666.666666 USDC
+// Total Margin: 0.033333 USDC (sekitar 500 ribu rupiah)
+// Harga Jual: 666.699999 USDC (sekitar 10.5 juta rupiah)
+// Angsuran Bulanan: 55.558333 USDC (sekitar 875 ribu rupiah per bulan)
+```
+
+**Contoh dengan berbagai skenario:**
+
+```javascript
+// Skenario 1: Tenor 6 bulan (lebih cepat)
+const [sellingPrice6, margin6, installment6] = await loanPlatform.quoteFinancing(
+    purchasePrice,
+    500, // 5% per tahun
+    6    // 6 bulan
+);
+// Angsuran lebih besar, tapi total margin lebih kecil
+
+// Skenario 2: Margin 10% per tahun
+const [sellingPrice10, margin10, installment10] = await loanPlatform.quoteFinancing(
+    purchasePrice,
+    1000, // 10% per tahun
+    12    // 12 bulan
+);
+// Total kewajiban lebih besar karena margin lebih tinggi
+```
+
+**Catatan:**
+- Fungsi `quoteFinancing` adalah `pure`, tidak mengubah state blockchain
+- Dapat dipanggil tanpa gas fee (hanya untuk membaca)
+- Berguna untuk menampilkan estimasi di frontend sebelum pengajuan
 
 #### 3.1 Pengajuan Pembiayaan (Off-Chain)
 
@@ -868,4 +1057,14 @@ const useRepay = () => {
 - Pastikan menggunakan ABI yang sesuai dengan versi kontrak
 - Selalu handle error dan validasi di frontend sebelum memanggil smart contract
 - Pertimbangkan gas fees dalam perhitungan ROI untuk investor
+
+---
+
+## Dokumentasi Tambahan
+
+Untuk informasi lebih detail tentang:
+- **Perhitungan Murabahah**: Lihat `KALKULATOR_MURABAHAH.md`
+- **Tutorial Perhitungan**: Lihat `TUTORIAL_PERHITUNGAN_MURABAHAH.md`
+- **Cara Mendapatkan Address**: Lihat `CARA_MENDAPATKAN_ADDRESS.md`
+- **Alamat Deployment**: Lihat `DEPLOYMENT_ADDRESSES.md`
 

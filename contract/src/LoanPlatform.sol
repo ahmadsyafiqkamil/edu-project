@@ -4,6 +4,7 @@ pragma solidity ^0.8.30;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import {EduLPToken} from "./EduLPToken.sol";
+import {MurabahahCalculator} from "./MurabahahCalculator.sol";
 
 /**
  * @title LoanPlatform
@@ -11,6 +12,7 @@ import {EduLPToken} from "./EduLPToken.sol";
  *         Menggunakan prinsip jual-beli dengan margin keuntungan, bukan bunga (riba).
  */
 contract LoanPlatform is Ownable {
+    using MurabahahCalculator for uint256;
 
     // =================================================================
     //                           State Variables
@@ -355,5 +357,22 @@ contract LoanPlatform is Ownable {
             return 0;
         }
         return (totalFinancingActive * 10000) / poolValue;
+    }
+
+    /**
+     * @notice Menghitung estimasi pembiayaan (kalkulator Murabahah).
+     * @param _purchasePrice Harga pokok jasa/barang.
+     * @param _marginRateBps Margin keuntungan tahunan dalam basis points (contoh: 500 = 5%).
+     * @param _tenureMonths Jangka waktu pembiayaan dalam bulan.
+     * @return sellingPrice Total harga jual (kewajiban mahasiswa).
+     * @return totalMargin Total keuntungan margin.
+     * @return monthlyInstallment Angsuran per bulan.
+     */
+    function quoteFinancing(
+        uint256 _purchasePrice,
+        uint256 _marginRateBps,
+        uint256 _tenureMonths
+    ) external pure returns (uint256 sellingPrice, uint256 totalMargin, uint256 monthlyInstallment) {
+        return MurabahahCalculator.calculateFinancingDetail(_purchasePrice, _marginRateBps, _tenureMonths);
     }
 }
